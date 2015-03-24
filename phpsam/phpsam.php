@@ -1,6 +1,6 @@
 <?php
 spl_autoload_register('phpsam::autoload_class');
-
+require_once 'database/medoo.php';
 class phpsam {
     
     public static $config=null;
@@ -9,6 +9,8 @@ class phpsam {
     public static $controller_name='';
     public static $action_name='';
     public static $theme='';
+    public static $theme_url='';
+    public static $medoo=null;
     
     static function run($config=null) {
         $base_url="http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']).'/';
@@ -19,8 +21,11 @@ class phpsam {
         }
         phpsam::$config=$config;
         if(isset($config->theme)) {
-            phpsam::$theme=$config->theme;
+            $theme=$config->theme;
         }
+        else $theme='v1';
+        phpsam::$theme=$theme;
+        phpsam::$theme_url=phpsam::$base_url.'theme/'.$theme.'/';
         $route=new \phpsam\route\route($config,$_SERVER);
     }
     
@@ -30,6 +35,11 @@ class phpsam {
         if(is_file($file)){
             require_once $file;
         }
+    }
+    
+    static function redirect($controller,$action,$params=null) {
+        header("Location:" . phpsam::$base_url.$controller.'/'.$action.'/'.$params);
+        die();
     }
     
 }

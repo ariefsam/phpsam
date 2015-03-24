@@ -1,5 +1,5 @@
 <?php
-namespace phpsam\database;
+//namespace phpsam\database;
 /*!
  * Medoo database framework
  * http://medoo.in

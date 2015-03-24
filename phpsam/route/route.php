@@ -51,6 +51,7 @@ class route {
                 echo "<h1>Render Error(500)</h1>";
                 break;
         }
+        die();
     }
     
 }
