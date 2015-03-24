@@ -3,7 +3,7 @@ namespace phpsam\mvc;
 class controller {
     
     public $layout='default';
-    public $input_post=null;
+    protected $input_post=null;
     
     function before_action() {
         
@@ -13,7 +13,7 @@ class controller {
         if(isset($_POST)) {
             foreach($_POST as $key=>$value) {
                 if(!is_array($value)){
-                    $this->input_post[$key]=  filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
+                    $this->input_post[$key] =  filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
                 }
             }
         }
@@ -82,4 +82,17 @@ class controller {
     function url($url='') {
         return \phpsam::$base_url . $url;
     }
+    
+    function set_flash($name,$value) {
+       $_SESSION['_phpsamflash'][$name]=$value;
+    }
+    
+    function get_flash($name) {
+        if(isset($_SESSION['_phpsamflash'][$name])) {
+            $return= $_SESSION['_phpsamflash'][$name];
+            unset($_SESSION['_phpsamflash'][$name]);
+            return $return;
+        }
+    }
+    
 }
