@@ -3,7 +3,7 @@ namespace phpsam\mvc;
 class controller {
     
     public $layout='default';
-    public $input_post=array();
+    public $input_post=null;
     
     function before_action() {
         
