@@ -10,7 +10,9 @@ class route {
             $server=$_SERVER;
         }
         $base_url=\phpsam::$base_url;
-        $uri=  str_replace(dirname($server['SCRIPT_NAME']).'/', "", $server['REQUEST_URI']);
+        $dirname=dirname($server['SCRIPT_NAME']);
+        if($dirname!='/') $dirname.='/';
+        $uri= substr($server['REQUEST_URI'],strlen($dirname));
         $explode_url=  explode("/", $uri);
         $this->uri=$explode_url;
         if(!$controller_name=@$explode_url[0]) {
