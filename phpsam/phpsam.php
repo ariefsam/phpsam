@@ -13,8 +13,8 @@ class phpsam {
     public static $medoo=null;
     
     static function run($config=null) {
-        $base_url="http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']).'/';
-        phpsam::$base_url=$base_url;
+        $base_url=$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']).'/';
+        phpsam::$base_url=  "http://".str_replace("//", "/", $base_url);
         phpsam::$base_directory=dirname($_SERVER['SCRIPT_FILENAME']).'/';
         if($config==null) {
             $config=  new config\config();
