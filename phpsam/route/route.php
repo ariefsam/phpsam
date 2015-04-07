@@ -3,7 +3,7 @@ namespace phpsam\route;
 
 class route {
     
-    public static $uri=array();
+    public static $params=array();
     
     function __construct($config=null,$server=null) {
         if($server==null) {
@@ -14,7 +14,7 @@ class route {
         if($dirname!='/') $dirname.='/';
         $uri= substr($server['REQUEST_URI'],strlen($dirname));
         $explode_url=  explode("/", $uri);
-        $this->uri=$explode_url;
+        $this->params=$explode_url;
         if(!$controller_name=@$explode_url[0]) {
             $controller_name='home';
         }
@@ -32,6 +32,7 @@ class route {
         $controller_class="\\mvc\\controller\\" . $controller_name;
         if(class_exists($controller_class)){
             $controller=new $controller_class();
+            $controller->params=$this->params;
             $controller->action($action_name,$explode_url);
         }
         else {

@@ -11,6 +11,7 @@ class phpsam {
     public static $theme='';
     public static $theme_url='';
     public static $medoo=null;
+    public static $user=null;
     
     static function run($config=null) {
         $base_url=$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']).'/';
@@ -37,8 +38,15 @@ class phpsam {
         }
     }
     
-    static function redirect($controller,$action,$params=null) {
-        header("Location:" . phpsam::$base_url.$controller.'/'.$action.'/'.$params);
+    static function redirect($controller,$action=null,$params=null) {
+        $location=phpsam::$base_url.$controller.'/';
+        if ($action) {
+            $location.=$action;
+        }
+        if($params) {
+            $location.='/'.$params;
+        }
+        header("Location:" . $location);
         die();
     }
     

@@ -12,6 +12,7 @@ class medooModel extends model {
         else {
             $this->medoo=  \phpsam::$medoo;
         }
+        parent::__construct();
     }
     
     public function __call($method, $args) {

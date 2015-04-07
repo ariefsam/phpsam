@@ -4,6 +4,7 @@ class controller {
     
     public $layout='default';
     protected $input_post=null;
+    public $params=array();
     
     function before_action() {
         
@@ -12,8 +13,15 @@ class controller {
     function __construct() {
         if(isset($_POST)) {
             foreach($_POST as $key=>$value) {
-                if(!is_array($value)){
+                if(is_string($value)){
                     $this->input_post[$key] =  filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
+                }
+                else {
+                    foreach($value as $kv=>$v) {
+                        if(is_string($v)) {
+                            $this->input_post[$key][$kv]=filter_var($v,FILTER_SANITIZE_STRING);
+                        }
+                    }
                 }
             }
         }
@@ -79,6 +87,32 @@ class controller {
         }
     }
     
+    function render_partial($_view_name=null,$_data=null) {
+        if(!@$_view_name) {
+            \phpsam\route\route::throw_error(1);
+        }
+        else {
+            if(is_array($_data)) {
+                foreach($_data as $_key=>$_value) {
+                    $$_key=$_value;
+                }
+            }
+            $_reflection=new \ReflectionClass($this);
+            //Get Content Page
+            $_page=\phpsam::$base_directory.'/theme/' . \phpsam::$theme.'/views/'.  $_reflection->getShortName().'/'.$_view_name.'.php';
+            if(is_file($_page)) {
+                ob_start();
+                require $_page;
+                $_page_content=  ob_get_clean();
+            }
+            else {
+                \phpsam\route\route::throw_error(1);
+            }
+            
+            echo $_page_content;
+        }
+    }
+    
     function url($url='') {
         return \phpsam::$base_url . $url;
     }
@@ -93,6 +127,10 @@ class controller {
             unset($_SESSION['_phpsamflash'][$name]);
             return $return;
         }
+    }
+    
+    function redirect($controller,$action,$params=null) {
+        \phpsam::redirect($controller, $action, $params);
     }
     
 }
