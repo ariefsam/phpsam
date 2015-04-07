@@ -31,6 +31,7 @@ class phpsam {
     }
     
     static function autoload_class($name) {
+        $name=trim($name,"\\");
         $name=  str_replace("\\", "/", $name);
         $file=dirname($_SERVER['SCRIPT_FILENAME'])."/".$name . '.php';
         if(is_file($file)){
